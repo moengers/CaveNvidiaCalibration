@@ -10,6 +10,9 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 
+#Ignore Cave Package
+de.htw.cave/
+
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
 
