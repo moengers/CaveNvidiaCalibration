@@ -13,6 +13,9 @@
 #Ignore Cave Package
 de.htw.cave/
 
+#Ignore Build Folder
+Build/
+
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
 
