@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Htw.Cave.Joycons;
 
 public class CalibrationMenu : MonoBehaviour
 {
@@ -20,12 +21,17 @@ public class CalibrationMenu : MonoBehaviour
     void Start()
     {
         SetDefaultRQ(displayL);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (JoyconInput.GetButton("Trigger R") || Input.GetKeyDown(KeyCode.Q))
+        {
+            ChangeStepSize();
+            Debug.Log("Trigger R triggered & Stepsize: " + stepSize);
+        }
     }
 
     private void SetDefaultRQ(int [,] display)
@@ -52,5 +58,20 @@ public class CalibrationMenu : MonoBehaviour
         return s;
     }
 
+    private void ChangeStepSize()
+    {
+        if(stepSize == 1)
+        {
+            stepSize = 5;
+        }
+        if (stepSize == 5)
+        {
+            stepSize = 10;
+        }
+        if (stepSize == 10)
+        {
+            stepSize = 1;
+        }
+    }
 
 }
