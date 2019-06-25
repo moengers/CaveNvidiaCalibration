@@ -10,8 +10,6 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 
-#Ignore Cave Package
-de.htw.cave/
 
 #Ignore Build Folder
 Build/

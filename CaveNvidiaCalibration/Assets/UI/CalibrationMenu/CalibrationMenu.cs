@@ -27,7 +27,7 @@ public class CalibrationMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (JoyconInput.GetButton("Trigger R") || Input.GetKeyDown(KeyCode.Q))
+        if (JoyconInput.GetButtonUp("Trigger R") || Input.GetKeyDown(KeyCode.Q))
         {
             ChangeStepSize();
             Debug.Log("Trigger R triggered & Stepsize: " + stepSize);
@@ -64,11 +64,11 @@ public class CalibrationMenu : MonoBehaviour
         {
             stepSize = 5;
         }
-        if (stepSize == 5)
+        else if (stepSize == 5)
         {
             stepSize = 10;
         }
-        if (stepSize == 10)
+        else if (stepSize == 10)
         {
             stepSize = 1;
         }
