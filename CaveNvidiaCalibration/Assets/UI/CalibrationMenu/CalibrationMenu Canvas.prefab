@@ -354,6 +354,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c364137340724143801ad78797850fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteCornerW: {fileID: 21300000, guid: 945fc62d0dca2254f9c8b49984a55393, type: 3}
+  spriteCornerB: {fileID: 21300000, guid: addbf6f4ecafe274ea233dd0e3034ff1, type: 3}
+  spriteDisplayW: {fileID: 21300000, guid: 8c85c1dc629ff204fbfcca59471b5123, type: 3}
+  spriteDisplayB: {fileID: 21300000, guid: 092d6b2b2c0f4244296d429d21c4ae07, type: 3}
 --- !u!1 &883802013462509488
 GameObject:
   m_ObjectHideFlags: 0

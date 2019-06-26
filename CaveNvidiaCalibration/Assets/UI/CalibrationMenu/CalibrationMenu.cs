@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using Htw.Cave.Joycons;
 
 public class CalibrationMenu : MonoBehaviour
@@ -41,6 +42,8 @@ public class CalibrationMenu : MonoBehaviour
     private GameObject stepSize1Text;
     private GameObject stepSize5Text;
     private GameObject stepSize10Text;
+    //Displays
+    private 
 
 
 
@@ -52,6 +55,7 @@ public class CalibrationMenu : MonoBehaviour
         SetDefaultRQ(displayR);
         SetDefaultRQ(displayB);
         InitUiElements();
+        UpdateStepSizeUI();
 
     }
     //Damit nur einmal ausgeführt wird:
@@ -76,10 +80,15 @@ public class CalibrationMenu : MonoBehaviour
                 cARDB.GetComponent<SpriteRenderer>().sprite = spriteCAW; 
             }*/
 
+            
+
             ChangeXYInputManager();
+            ChangeDisplayInputManager();
         }
 
     }
+
+
 
     private void SetDefaultRQ(int [,] display)
     {
@@ -110,14 +119,20 @@ public class CalibrationMenu : MonoBehaviour
         if(stepSize == 1)
         {
             stepSize = 5;
+            UpdateStepSizeUI();
+                 
         }
         else if (stepSize == 5)
         {
             stepSize = 10;
+            UpdateStepSizeUI();
+
         }
         else if (stepSize == 10)
         {
             stepSize = 1;
+            UpdateStepSizeUI();
+
         }
     }
     //Call it after the Change
@@ -129,11 +144,25 @@ public class CalibrationMenu : MonoBehaviour
                 stepSize1SpriteRenderer.GetComponent<SpriteRenderer>().sprite = spriteDisplayB;
                 stepSize5SpriteRenderer.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
                 stepSize10SpriteRenderer.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
-                stepSize1Text.GetComponent<Te>
+                stepSize1Text.GetComponent<Text>().color = Color.white;
+                stepSize5Text.GetComponent<Text>().color = Color.black;
+                stepSize10Text.GetComponent<Text>().color = Color.black;
                 return;
             case 5:
+                stepSize1SpriteRenderer.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                stepSize5SpriteRenderer.GetComponent<SpriteRenderer>().sprite = spriteDisplayB;
+                stepSize10SpriteRenderer.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                stepSize1Text.GetComponent<Text>().color = Color.black;
+                stepSize5Text.GetComponent<Text>().color = Color.white;
+                stepSize10Text.GetComponent<Text>().color = Color.black;
                 return;
             case 10:
+                stepSize1SpriteRenderer.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                stepSize5SpriteRenderer.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                stepSize10SpriteRenderer.GetComponent<SpriteRenderer>().sprite = spriteDisplayB;
+                stepSize1Text.GetComponent<Text>().color = Color.black;
+                stepSize5Text.GetComponent<Text>().color = Color.black;
+                stepSize10Text.GetComponent<Text>().color = Color.white;
                 return;
         }
     }
@@ -208,6 +237,56 @@ public class CalibrationMenu : MonoBehaviour
         }
     }
 
+    //1234 && Analog R
+    private void ChangeDisplayInputManager()
+    {
+
+        if (JoyconInput.GetAxis("Horizontal R") > 0 || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("Horizontal R: " + JoyconInput.GetAxis("Horizontal R"));
+            //Select Left
+            selectedDisplay = 2;
+            UpdateDisplayUI();
+        }
+        if (JoyconInput.GetAxis("Horizontal R") < 0 || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            //Select Left
+            selectedDisplay = 0;
+            UpdateDisplayUI();
+        }
+        if (JoyconInput.GetAxis("Vertical R") > 0 || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            //Select Left
+            selectedDisplay = 1;
+            UpdateDisplayUI();
+        }
+        if (JoyconInput.GetAxis("Vertical R") < 0 || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            //Select Left
+            selectedDisplay = 3;
+            UpdateDisplayUI();
+        }
+    }
+    //Call it after the Change
+    private void UpdateDisplayUI()
+    {
+        switch (selectedDisplay)
+        {
+            case 0:
+
+                return;
+            case 1:
+
+                return;
+            case 2:
+
+                return;
+            case 3:
+
+                return;
+        }
+    }
+
     private void InitUiElements()
     {
         //Corner Arrowrs
@@ -217,8 +296,8 @@ public class CalibrationMenu : MonoBehaviour
         cornerLUSpriteRenderer = GameObject.Find("Corner Arrow B/lu");
         //StepSize
         stepSize1SpriteRenderer = GameObject.Find("StepSize/1 b/stop");
-        stepSize1SpriteRenderer = GameObject.Find("StepSize/5 b/stop");
-        stepSize1SpriteRenderer = GameObject.Find("StepSize/10 b/stop");
+        stepSize5SpriteRenderer = GameObject.Find("StepSize/5 b/stop");
+        stepSize10SpriteRenderer = GameObject.Find("StepSize/10 b/stop");
         stepSize1Text = GameObject.Find("StepSize/1 b/Text");
         stepSize5Text = GameObject.Find("StepSize/5 b/Text");
         stepSize10Text = GameObject.Find("StepSize/10 b/Text");
