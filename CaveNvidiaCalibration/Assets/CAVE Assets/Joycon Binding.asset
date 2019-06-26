@@ -25,16 +25,16 @@ MonoBehaviour:
   - name: Vertical R
     axis: 1
     button: 10
-  - name: Trigger L
-    axis: 0
-    button: 12
   - name: Trigger R
     axis: 0
     button: 12
-  - name: Bumper L
+  - name: Trigger L
+    axis: 0
+    button: 12
+  - name: Bumper R
     axis: 0
     button: 11
-  - name: Bumper R
+  - name: Bumper L
     axis: 0
     button: 11
   - name: Stick L
