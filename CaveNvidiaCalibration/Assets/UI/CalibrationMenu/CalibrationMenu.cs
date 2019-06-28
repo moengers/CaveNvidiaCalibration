@@ -9,8 +9,8 @@ public class CalibrationMenu : MonoBehaviour
 {
     //------------------------------------Sprites------------------------------------
     //Corner Arrow Sprits
-    public Sprite spriteCornerW;
-    public Sprite spriteCornerB;
+    /*public Sprite spriteCornerW;
+    public Sprite spriteCornerB;*/
     //Display Sprits
     public Sprite spriteDisplayW;
     public Sprite spriteDisplayB;
@@ -27,14 +27,14 @@ public class CalibrationMenu : MonoBehaviour
     int selectedDisplay;
     //0,1,2,3 = left-up, right-up, right-down, left-down
     int selectedCorner;
-
+    //How much x and y change (defualt 1)
     int stepSize = 1;
 
     //Corner Arrow
-    private GameObject cornerRDSpriteRenderer;
-    private GameObject cornerRUSpriteRenderer;
-    private GameObject cornerLDSpriteRenderer;
-    private GameObject cornerLUSpriteRenderer;
+    private GameObject[] cornerRDSpriteRenderer;
+    private GameObject[] cornerRUSpriteRenderer;
+    private GameObject[] cornerLDSpriteRenderer;
+    private GameObject[] cornerLUSpriteRenderer;
     //StepSize
     private GameObject stepSize1SpriteRenderer;
     private GameObject stepSize5SpriteRenderer;
@@ -47,75 +47,57 @@ public class CalibrationMenu : MonoBehaviour
     private GameObject displayUIF;
     private GameObject displayUIR;
     private GameObject displayUIB;
+    //XY Values
+    private GameObject xValueText;
+    private GameObject yValueText;
 
-
-
-    // Start is called before the first frame update
+    //----------------------Start----------------------//
     void Start()
     {
+        //Set the default R and Q Values (1 and 0)
         SetDefaultRQ(displayL);
         SetDefaultRQ(displayF);
         SetDefaultRQ(displayR);
         SetDefaultRQ(displayB);
+        //Init/Find GameObjects
         InitUiElements();
+        //Initial UI
         UpdateStepSizeUI();
+        UpdateDisplayUI();
+        UpdateCornerUI();
 
     }
+    //----------------------Update----------------------//
     //Damit nur einmal ausgeführt wird:
     float m_lastPressed;
-    // Update is called once per frame
     void Update()
-    {
-        
-        //Press wird nur einmal ausgeführt
+    {        
+        //Press wird nur einmal ausgeführt (oder zumindest seltener)
         if (m_lastPressed != Time.time)
         {
             m_lastPressed = Time.time;
-            if (JoyconInput.GetButtonUp("Trigger R") || Input.GetKeyDown(KeyCode.Q))
-            {
-                ChangeStepSize();
-                Debug.Log("Trigger R triggered & Stepsize: " + stepSize);
-            }
-
-            /*
-            if (JoyconController.Left.GetButtonUp(JoyconLib.Joycon.Button.DPAD_DOWN))
-            {
-                cARDB.GetComponent<SpriteRenderer>().sprite = spriteCAW; 
-            }*/
-
             
-
+            //Update GUI by Input
+            ChangeStepSizeInputManager();
             ChangeXYInputManager();
             ChangeDisplayInputManager();
+            ChangeCornerInputManager();
         }
 
     }
 
 
-
-    private void SetDefaultRQ(int [,] display)
+    
+    //----------------------Change Step Size----------------------//
+    //q && Right Trigger
+    private void ChangeStepSizeInputManager()
     {
-        for(int i = 0; i <= 3; i++)
+        //Rechts Links vertauscht beim Trigger??
+        if (JoyconInput.GetButtonUp("Trigger R") || Input.GetKeyDown(KeyCode.Q))
         {
-            display[i, 2] = 1;
-            display[i, 3] = 0;
+            ChangeStepSize();
         }
     }
-
-    private string DisplayToString(int[,] display)
-    {
-        string s = "Display: ";
-        for(int i = 0; i <= 3; i++)
-        {
-            s += "Corner" + i + ": ";
-            s += "x: " + display[i, 0] + "; ";
-            s += "y: " + display[i, 1] + "; ";
-            s += "r: " + display[i, 2] + "; ";
-            s += "q: " + display[i, 3] + "; ";
-        }
-        return s;
-    }
-
     //Change StepSize to 1,5,10 and back to 1
     private void ChangeStepSize()
     {
@@ -170,27 +152,63 @@ public class CalibrationMenu : MonoBehaviour
         }
     }
 
+
+    //----------------------Change XY Values----------------------//
     //IJKL && Left Joy Con Arrow Keys
     private void ChangeXYInputManager()
     {
+        if(JoyconController.Left == null || JoyconController.Right == null)
+        {
+            //No Joy Cons detected
+            //Only Keyboard Used:
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                ChangeY(1);
+                ChangeXYUI();
+            }
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                ChangeX(1);
+                ChangeXYUI();
+            }
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                ChangeY(-1);
+                ChangeXYUI();
+            }
+
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                ChangeX(-1);
+                ChangeXYUI();
+            }
+            return;
+        }
+        //JoyCons && Keyboard: 
         if (JoyconController.Left.GetButtonUp(JoyconLib.Joycon.Button.DPAD_UP) || Input.GetKeyDown(KeyCode.I))
         {
             ChangeY(1);
+            ChangeXYUI();
         }
 
         if (JoyconController.Left.GetButtonUp(JoyconLib.Joycon.Button.DPAD_RIGHT) || Input.GetKeyDown(KeyCode.L))
         {
             ChangeX(1);
+            ChangeXYUI();
         }
 
         if (JoyconController.Left.GetButtonUp(JoyconLib.Joycon.Button.DPAD_DOWN) || Input.GetKeyDown(KeyCode.K))
         {
             ChangeY(-1);
+            ChangeXYUI();
         }
 
         if (JoyconController.Left.GetButtonUp(JoyconLib.Joycon.Button.DPAD_LEFT) || Input.GetKeyDown(KeyCode.J))
         {
             ChangeX(-1);
+            ChangeXYUI();
         }
     }
     //sign -1 oder 1 
@@ -239,40 +257,93 @@ public class CalibrationMenu : MonoBehaviour
                 return;
         }
     }
+    private void ChangeXYUI()
+    {
+        switch (selectedDisplay)
+        {
+            case 0:
+                xValueText.GetComponent<Text>().text = displayL[selectedCorner, 0].ToString();
+                yValueText.GetComponent<Text>().text = displayL[selectedCorner, 1].ToString();
+                return;
+            case 1:
+                xValueText.GetComponent<Text>().text = displayF[selectedCorner, 0].ToString();
+                yValueText.GetComponent<Text>().text = displayF[selectedCorner, 1].ToString();
+                return;
+            case 2:
+                xValueText.GetComponent<Text>().text = displayR[selectedCorner, 0].ToString();
+                yValueText.GetComponent<Text>().text = displayR[selectedCorner, 1].ToString();
+                return;
+            case 3:
+                xValueText.GetComponent<Text>().text = displayB[selectedCorner, 0].ToString();
+                yValueText.GetComponent<Text>().text = displayB[selectedCorner, 1].ToString();
+                return;
+        }
+    }
 
+
+    //----------------------Change Display----------------------//
     //1234 && Analog R
     private void ChangeDisplayInputManager()
-    {
+    {        
+        if (JoyconController.Left == null || JoyconController.Right == null)
+        {
+            //No Joy Cons detected
+            //Only Keyboard used:
+            //Left:
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                selectedDisplay = 0;
+                UpdateDisplayUI();
+            }
+            //Front:
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                selectedDisplay = 1;
+                UpdateDisplayUI();
+            }
+            //Right:
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                selectedDisplay = 2;
+                UpdateDisplayUI();
+            }
+            //Bottom:
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                selectedDisplay = 3;
+                UpdateDisplayUI();
+            }
+            ChangeXYUI();
+            return;
+        }
 
         //JoyconController.Right.GetStick()[0] : Horizontal
         //JoyconController.Right.GetStick()[1] : Vertical
-
-        Debug.Log("JoyconController.Right.GetStick()[1]: " + JoyconController.Right.GetStick()[1]);
-
-        if (JoyconController.Right.GetStick()[0] > 0.2 || Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            //Select Left
-            selectedDisplay = 2;
-            UpdateDisplayUI();
-        }
+        //Left:
         if (JoyconController.Right.GetStick()[0] < -0.2 || Input.GetKeyDown(KeyCode.Alpha1))
         {
-            //Select Left
             selectedDisplay = 0;
             UpdateDisplayUI();
         }
-        if (JoyconController.Right.GetStick()[1] > 0.2 || Input.GetKeyDown(KeyCode.Alpha1))
+        //Front:
+        if (JoyconController.Right.GetStick()[1] > 0.2 || Input.GetKeyDown(KeyCode.Alpha2))
         {
-            //Select Left
             selectedDisplay = 1;
             UpdateDisplayUI();
         }
-        if (JoyconController.Right.GetStick()[1] < -0.2 || Input.GetKeyDown(KeyCode.Alpha1))
+        //Right:
+        if (JoyconController.Right.GetStick()[0] > 0.2 || Input.GetKeyDown(KeyCode.Alpha3))
         {
-            //Select Left
+            selectedDisplay = 2;
+            UpdateDisplayUI();
+        }  
+        //Bottom:
+        if (JoyconController.Right.GetStick()[1] < -0.2 || Input.GetKeyDown(KeyCode.Alpha4))
+        {
             selectedDisplay = 3;
             UpdateDisplayUI();
         }
+        ChangeXYUI();
     }
     //Call it after the Change
     private void UpdateDisplayUI()
@@ -306,13 +377,120 @@ public class CalibrationMenu : MonoBehaviour
         }
     }
 
+
+    //----------------------Change Corner----------------------//
+    //1234 && Analog R
+    private void ChangeCornerInputManager()
+    {
+        if (JoyconController.Left == null || JoyconController.Right == null)
+        {
+            //No Joy Cons detected
+            //Only Keyboard used:
+            //Left:
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                selectedCorner = 0;
+                UpdateCornerUI();
+            }
+            //Front:
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                selectedCorner = 1;
+                UpdateCornerUI();
+            }
+            //Right:
+            if (Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                selectedCorner = 2;
+                UpdateCornerUI();
+            }
+            //Bottom:
+            if (Input.GetKeyDown(KeyCode.Alpha8))
+            {
+                selectedCorner = 3;
+                UpdateCornerUI();
+            }
+            ChangeXYUI();
+            return;
+        }
+
+        //JoyconController.Right.GetStick()[0] : Horizontal
+        //JoyconController.Right.GetStick()[1] : Vertical
+        //Left:
+        if (JoyconController.Left.GetStick()[0] < -0.2 || Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            selectedCorner = 0;
+            UpdateCornerUI();
+        }
+        //Front:
+        if (JoyconController.Left.GetStick()[1] > 0.2 || Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            selectedCorner = 1;
+            UpdateCornerUI();
+        }
+        //Right:
+        if (JoyconController.Left.GetStick()[0] > 0.2 || Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            selectedCorner = 2;
+            UpdateCornerUI();
+        }
+        //Bottom:
+        if (JoyconController.Left.GetStick()[1] < -0.2 || Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            selectedCorner = 3;
+            UpdateCornerUI();
+        }
+        ChangeXYUI();
+    }
+    //Call it after the Change
+    private void UpdateCornerUI()
+    {
+        switch (selectedCorner)
+        {
+            case 0:
+                CornerSpriteRendererChangeVisablity(cornerLUSpriteRenderer, true);
+                CornerSpriteRendererChangeVisablity(cornerRUSpriteRenderer, false);
+                CornerSpriteRendererChangeVisablity(cornerRDSpriteRenderer, false);
+                CornerSpriteRendererChangeVisablity(cornerLDSpriteRenderer, false);
+                return;
+            case 1:
+                CornerSpriteRendererChangeVisablity(cornerLUSpriteRenderer, false);
+                CornerSpriteRendererChangeVisablity(cornerRUSpriteRenderer, true);
+                CornerSpriteRendererChangeVisablity(cornerRDSpriteRenderer, false);
+                CornerSpriteRendererChangeVisablity(cornerLDSpriteRenderer, false);
+                return;
+            case 2:
+                CornerSpriteRendererChangeVisablity(cornerLUSpriteRenderer, false);
+                CornerSpriteRendererChangeVisablity(cornerRUSpriteRenderer, false);
+                CornerSpriteRendererChangeVisablity(cornerRDSpriteRenderer, true);
+                CornerSpriteRendererChangeVisablity(cornerLDSpriteRenderer, false);
+                return;
+            case 3:
+                CornerSpriteRendererChangeVisablity(cornerLUSpriteRenderer, false);
+                CornerSpriteRendererChangeVisablity(cornerRUSpriteRenderer, false);
+                CornerSpriteRendererChangeVisablity(cornerRDSpriteRenderer, false);
+                CornerSpriteRendererChangeVisablity(cornerLDSpriteRenderer, true);
+                return;
+        }
+    }
+    //Switch the visabilty of a corner arrow
+    private void CornerSpriteRendererChangeVisablity(GameObject[] cornerSpriteRenderer, bool visible)
+    {
+        foreach(GameObject arrow in cornerSpriteRenderer)
+        {
+            arrow.GetComponent<Renderer>().enabled = visible;
+        }
+    }
+
+
+    //----------------------Init/Find all Elements----------------------//
     private void InitUiElements()
     {
         //Corner Arrowrs
-        cornerRDSpriteRenderer = GameObject.Find("Corner Arrow B/rd");
-        cornerRUSpriteRenderer = GameObject.Find("Corner Arrow B/ru");
-        cornerLDSpriteRenderer = GameObject.Find("Corner Arrow B/ld");
-        cornerLUSpriteRenderer = GameObject.Find("Corner Arrow B/lu");
+        cornerRDSpriteRenderer = GameObject.FindGameObjectsWithTag("Arrowrd");
+        cornerRUSpriteRenderer = GameObject.FindGameObjectsWithTag("Arrowru");
+        cornerLDSpriteRenderer = GameObject.FindGameObjectsWithTag("Arrowld");
+        cornerLUSpriteRenderer = GameObject.FindGameObjectsWithTag("Arrowlu");
         //StepSize
         stepSize1SpriteRenderer = GameObject.Find("StepSize/1 b/stop");
         stepSize5SpriteRenderer = GameObject.Find("StepSize/5 b/stop");
@@ -325,9 +503,34 @@ public class CalibrationMenu : MonoBehaviour
         displayUIF = GameObject.Find("Displays/D Front");
         displayUIR = GameObject.Find("Displays/D Right");
         displayUIB = GameObject.Find("Displays/D Bot");
+        //XY Values
+        xValueText = GameObject.Find("XY/X/Value");
+        yValueText = GameObject.Find("XY/Y/Value");
 
     }
-
+    //----------------------Set the default RQ Values----------------------//
+    private void SetDefaultRQ(int[,] display)
+    {
+        for (int i = 0; i <= 3; i++)
+        {
+            display[i, 2] = 1;
+            display[i, 3] = 0;
+        }
+    }
+    //----------------------ForDebug: Format the Display Values to String----------------------//
+    private string DisplayToString(int[,] display)
+    {
+        string s = "Display: ";
+        for (int i = 0; i <= 3; i++)
+        {
+            s += "Corner" + i + ": ";
+            s += "x: " + display[i, 0] + "; ";
+            s += "y: " + display[i, 1] + "; ";
+            s += "r: " + display[i, 2] + "; ";
+            s += "q: " + display[i, 3] + "; ";
+        }
+        return s;
+    }
 
 
 

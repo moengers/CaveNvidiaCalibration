@@ -17,4 +17,4 @@ MonoBehaviour:
   width: 3
   height: 3
   fieldOfView: 90
-  invertStereo: 0
+  invertStereo: 1
