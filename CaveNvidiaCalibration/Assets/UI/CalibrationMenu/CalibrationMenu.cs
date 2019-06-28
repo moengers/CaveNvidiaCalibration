@@ -43,7 +43,10 @@ public class CalibrationMenu : MonoBehaviour
     private GameObject stepSize5Text;
     private GameObject stepSize10Text;
     //Displays
-    private 
+    private GameObject displayUIL;
+    private GameObject displayUIF;
+    private GameObject displayUIR;
+    private GameObject displayUIB;
 
 
 
@@ -241,26 +244,30 @@ public class CalibrationMenu : MonoBehaviour
     private void ChangeDisplayInputManager()
     {
 
-        if (JoyconInput.GetAxis("Horizontal R") > 0 || Input.GetKeyDown(KeyCode.Alpha1))
+        //JoyconController.Right.GetStick()[0] : Horizontal
+        //JoyconController.Right.GetStick()[1] : Vertical
+
+        Debug.Log("JoyconController.Right.GetStick()[1]: " + JoyconController.Right.GetStick()[1]);
+
+        if (JoyconController.Right.GetStick()[0] > 0.2 || Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("Horizontal R: " + JoyconInput.GetAxis("Horizontal R"));
             //Select Left
             selectedDisplay = 2;
             UpdateDisplayUI();
         }
-        if (JoyconInput.GetAxis("Horizontal R") < 0 || Input.GetKeyDown(KeyCode.Alpha1))
+        if (JoyconController.Right.GetStick()[0] < -0.2 || Input.GetKeyDown(KeyCode.Alpha1))
         {
             //Select Left
             selectedDisplay = 0;
             UpdateDisplayUI();
         }
-        if (JoyconInput.GetAxis("Vertical R") > 0 || Input.GetKeyDown(KeyCode.Alpha1))
+        if (JoyconController.Right.GetStick()[1] > 0.2 || Input.GetKeyDown(KeyCode.Alpha1))
         {
             //Select Left
             selectedDisplay = 1;
             UpdateDisplayUI();
         }
-        if (JoyconInput.GetAxis("Vertical R") < 0 || Input.GetKeyDown(KeyCode.Alpha1))
+        if (JoyconController.Right.GetStick()[1] < -0.2 || Input.GetKeyDown(KeyCode.Alpha1))
         {
             //Select Left
             selectedDisplay = 3;
@@ -273,16 +280,28 @@ public class CalibrationMenu : MonoBehaviour
         switch (selectedDisplay)
         {
             case 0:
-
+                displayUIL.GetComponent<SpriteRenderer>().sprite = spriteDisplayB;
+                displayUIF.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                displayUIR.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                displayUIB.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
                 return;
             case 1:
-
+                displayUIL.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                displayUIF.GetComponent<SpriteRenderer>().sprite = spriteDisplayB;
+                displayUIR.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                displayUIB.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
                 return;
             case 2:
-
+                displayUIL.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                displayUIF.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                displayUIR.GetComponent<SpriteRenderer>().sprite = spriteDisplayB;
+                displayUIB.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
                 return;
             case 3:
-
+                displayUIL.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                displayUIF.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                displayUIR.GetComponent<SpriteRenderer>().sprite = spriteDisplayW;
+                displayUIB.GetComponent<SpriteRenderer>().sprite = spriteDisplayB;
                 return;
         }
     }
@@ -301,6 +320,11 @@ public class CalibrationMenu : MonoBehaviour
         stepSize1Text = GameObject.Find("StepSize/1 b/Text");
         stepSize5Text = GameObject.Find("StepSize/5 b/Text");
         stepSize10Text = GameObject.Find("StepSize/10 b/Text");
+        //Display
+        displayUIL = GameObject.Find("Displays/D Left");
+        displayUIF = GameObject.Find("Displays/D Front");
+        displayUIR = GameObject.Find("Displays/D Right");
+        displayUIB = GameObject.Find("Displays/D Bot");
 
     }
 
