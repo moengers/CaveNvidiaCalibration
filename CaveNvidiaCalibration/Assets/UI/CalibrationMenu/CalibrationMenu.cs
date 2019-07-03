@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Htw.Cave.Joycons;
+using Htw.Cave.Calibration.Configuration;
 
 public class CalibrationMenu : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class CalibrationMenu : MonoBehaviour
     //Corner Arrow Sprits
     /*public Sprite spriteCornerW;
     public Sprite spriteCornerB;*/
+
+    [SerializeField]
+    private ConfigurationManager configurationManager;
+
+    private const float MASHSTEPSIZEMULTIPLIKATOR = 0.01f;
+
     //Display Sprits
     public Sprite spriteDisplayW;
     public Sprite spriteDisplayB;
@@ -164,24 +171,28 @@ public class CalibrationMenu : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.I))
             {
                 ChangeY(1);
+                ChangeCalibrationManagerY(1);
                 ChangeXYUI();
             }
 
             if (Input.GetKeyDown(KeyCode.L))
             {
                 ChangeX(1);
+                ChangeCalibrationManagerX(1);
                 ChangeXYUI();
             }
 
             if (Input.GetKeyDown(KeyCode.K))
             {
                 ChangeY(-1);
+                ChangeCalibrationManagerY(-1);
                 ChangeXYUI();
             }
 
             if (Input.GetKeyDown(KeyCode.J))
             {
                 ChangeX(-1);
+                ChangeCalibrationManagerX(-1);
                 ChangeXYUI();
             }
             return;
@@ -190,24 +201,28 @@ public class CalibrationMenu : MonoBehaviour
         if (JoyconController.Left.GetButtonUp(JoyconLib.Joycon.Button.DPAD_UP) || Input.GetKeyDown(KeyCode.I))
         {
             ChangeY(1);
+            ChangeCalibrationManagerY(1);
             ChangeXYUI();
         }
 
         if (JoyconController.Left.GetButtonUp(JoyconLib.Joycon.Button.DPAD_RIGHT) || Input.GetKeyDown(KeyCode.L))
         {
             ChangeX(1);
+            ChangeCalibrationManagerX(1);
             ChangeXYUI();
         }
 
         if (JoyconController.Left.GetButtonUp(JoyconLib.Joycon.Button.DPAD_DOWN) || Input.GetKeyDown(KeyCode.K))
         {
             ChangeY(-1);
+            ChangeCalibrationManagerY(-1);
             ChangeXYUI();
         }
 
         if (JoyconController.Left.GetButtonUp(JoyconLib.Joycon.Button.DPAD_LEFT) || Input.GetKeyDown(KeyCode.J))
         {
             ChangeX(-1);
+            ChangeCalibrationManagerX(-1);
             ChangeXYUI();
         }
     }
@@ -233,6 +248,13 @@ public class CalibrationMenu : MonoBehaviour
                 displayB[selectedCorner, 0] += stepSize * sign;
                 return;
         }
+    }
+    private void ChangeCalibrationManagerX(int sign)
+    {
+        configurationManager
+            .ConfigurationMeshes[MapperDisplayToMash(selectedDisplay)].
+            ConfigurationVertices[MapperCornerToVertices(selectedCorner)].
+            Move(new Vector3(stepSize * sign * MASHSTEPSIZEMULTIPLIKATOR, 0f, 0f));
     }
     //sign -1 oder 1 
     private void ChangeY(int sign)
@@ -277,6 +299,47 @@ public class CalibrationMenu : MonoBehaviour
                 xValueText.GetComponent<Text>().text = displayB[selectedCorner, 0].ToString();
                 yValueText.GetComponent<Text>().text = displayB[selectedCorner, 1].ToString();
                 return;
+        }
+    }
+    private void ChangeCalibrationManagerY(int sign)
+    {
+        configurationManager
+            .ConfigurationMeshes[MapperDisplayToMash(selectedDisplay)].
+            ConfigurationVertices[MapperCornerToVertices(selectedCorner)].
+            Move(new Vector3(0f, stepSize*sign*MASHSTEPSIZEMULTIPLIKATOR, 0f));
+    }
+    //Mapped display and corner/vertices for the calibrationManager
+    private int MapperDisplayToMash(int display)
+    {
+        //configManager use 0, 1, 2, 3 as R, L, B, F or random??
+        switch (display)
+        {
+            case 0:
+                return 1;
+            case 1:
+                return 3;
+            case 2:
+                return 0;
+            case 3:
+                return 2;
+            default:
+                return -1;
+        }
+    }
+    private int MapperCornerToVertices(int corner)
+    {
+        switch (corner)
+        {
+            case 0:
+                return 2;
+            case 1:
+                return 3;
+            case 2:
+                return 1;
+            case 3:
+                return 0;
+            default:
+                return -1;
         }
     }
 

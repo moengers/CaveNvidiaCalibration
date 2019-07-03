@@ -1,0 +1,16 @@
+{
+  "name": "de.htw.cave.calibration",
+  "displayName": "Htw Cave Calibration",
+  "version": "0.0.1-preview",
+  "unity": "2019.1",
+  "description": "Extends the cave-package by a calibration utility. For Nvidia enterprise cards only.",
+  "keywords": [
+    "cave-package",
+    "calibration",
+    "warp",
+    "nvapi"
+  ],
+  "dependencies": {
+    "de.htw.cave": "0.5.2-preview"
+  }
+}

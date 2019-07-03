@@ -1,0 +1,15 @@
+{
+    "name": "Htw.Cave.Calibration.Runtime",
+    "references": [
+        "GUID:2287a3dad6fc5f145a5e01dfce3b75a3"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
