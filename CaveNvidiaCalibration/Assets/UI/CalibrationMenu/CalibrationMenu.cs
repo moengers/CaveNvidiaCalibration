@@ -242,7 +242,7 @@ public class CalibrationMenu : MonoBehaviour
                 displayF[selectedCorner, 0] += stepSize * sign;
                 return;
             case 2:
-                displayL[selectedCorner, 0] += stepSize * sign;
+                displayR[selectedCorner, 0] += stepSize * sign;
                 return;
             case 3:
                 displayB[selectedCorner, 0] += stepSize * sign;
@@ -272,7 +272,7 @@ public class CalibrationMenu : MonoBehaviour
                 displayF[selectedCorner, 1] += stepSize * sign;
                 return;
             case 2:
-                displayL[selectedCorner, 1] += stepSize * sign;
+                displayR[selectedCorner, 1] += stepSize * sign;
                 return;
             case 3:
                 displayB[selectedCorner, 1] += stepSize * sign;
