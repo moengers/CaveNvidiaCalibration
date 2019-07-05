@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Projector Settings
   m_EditorClassIdentifier: 
   cameraTarget: 1
-  forceFullScreen: 1
-  stereoEnabled: 0
+  forceFullScreen: 0
   stereoSeparation: 0.064
   stereoConvergence: 10
   nearClipPlane: 0.01

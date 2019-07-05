@@ -11,7 +11,8 @@ namespace Htw.Cave.Joycons
 	public enum JoyconAxisType
 	{
 		Button,
-		Stick
+		StickX,
+		StickY
 	}
 
 	/// <summary>
@@ -55,7 +56,7 @@ namespace Htw.Cave.Joycons
 
 		public static bool IsRightAxis(string axis)
 		{
-			return axis[axis.Length - 1] == 'L';
+			return axis[axis.Length - 1] == 'R';
 		}
 
 		public static JoyconAxis ResolveAxis(string axis)
@@ -104,19 +105,23 @@ namespace Htw.Cave.Joycons
 			{
 				JoyconAxis axis = null;
 
-				if(scheme.axis == JoyconAxisType.Stick)
-					axis = new JoyconStick(IsLeftAxis(scheme.name));
-				else if (scheme.axis == JoyconAxisType.Button)
+				if(scheme.axis == JoyconAxisType.Button)
 					axis = new JoyconButton(scheme.button);
+				else
+					axis = new JoyconStick(scheme.axis == JoyconAxisType.StickX);
+
 
 				Bind(scheme.name, axis);
 			}
 		}
 
-		public void Add(JoyconScheme scheme)
+		public void Add(params JoyconScheme[] schemes)
 		{
-			if(scheme != null && !Exists(scheme))
-				this.schemes.Add(scheme);
+			foreach(JoyconScheme scheme in schemes)
+			{
+				if(scheme != null && !Exists(scheme))
+					this.schemes.Add(scheme);
+			}
 		}
 
 		public bool Exists(string name)
@@ -131,16 +136,8 @@ namespace Htw.Cave.Joycons
 
 		private void AddDefaultSchemes()
 		{
-			Add(new JoyconScheme("Horizontal L", JoyconAxisType.Stick));
-			Add(new JoyconScheme("Horizontal R", JoyconAxisType.Stick));
-			Add(new JoyconScheme("Vertical L", JoyconAxisType.Stick));
-			Add(new JoyconScheme("Vertical R", JoyconAxisType.Stick));
-			Add(new JoyconScheme("Trigger L", JoyconAxisType.Button, Joycon.Button.SHOULDER_2));
-			Add(new JoyconScheme("Trigger R", JoyconAxisType.Button, Joycon.Button.SHOULDER_2));
-			Add(new JoyconScheme("Bumper L", JoyconAxisType.Button, Joycon.Button.SHOULDER_1));
-			Add(new JoyconScheme("Bumper R", JoyconAxisType.Button, Joycon.Button.SHOULDER_1));
-			Add(new JoyconScheme("Stick L", JoyconAxisType.Button, Joycon.Button.STICK));
-			Add(new JoyconScheme("Stick R", JoyconAxisType.Button, Joycon.Button.STICK));
+			Add(JoyconDefaults.StickSchemes);
+			Add(JoyconDefaults.ButtonSchemes);
 		}
 	}
 }

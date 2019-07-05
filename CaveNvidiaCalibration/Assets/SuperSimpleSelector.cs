@@ -35,8 +35,8 @@ public class SuperSimpleSelector : MonoBehaviour
     {
         if (JoyconInput.GetButtonDown("Trigger L"))
             this.selectedDisplay -= this.selectedDisplay > 0 ? 1 : 0;
-        else if (JoyconInput.GetButtonDown("Trigger R"))
-            this.selectedDisplay += this.selectedDisplay < this.configurationManager.ConfigurationMeshes.Count - 1 ? 1 : 0;
+        else if (JoyconInput.GetButtonDown("Trigger R")) { }
+            //this.selectedDisplay += this.selectedDisplay < this.configurationManager.ConfigurationMeshes.Count - 1 ? 1 : 0;
     }
 
     private void UpdateVertexSelection()

@@ -14,6 +14,13 @@ namespace Htw.Cave.Calibration.Configuration
     [RequireComponent(typeof(MeshRenderer))]
     public class ConfigurationMesh : MonoBehaviour
     {
+        private ConfigurationManager configurationManager;
+        public ConfigurationManager ConfigurationManager
+        {
+            get => this.configurationManager;
+            set => this.configurationManager = value;
+        }
+
         private ConfigurationVertex[] configurationVertices;
         public ConfigurationVertex[] ConfigurationVertices
         {
@@ -35,6 +42,7 @@ namespace Htw.Cave.Calibration.Configuration
 
         public void Awake()
         {
+            this.configurationManager = base.GetComponentInParent<ConfigurationManager>();
             this.nextIndex = 0;
             this.configurationVertices = new ConfigurationVertex[4];
             this.vertices = new Vector3[4];
@@ -45,9 +53,9 @@ namespace Htw.Cave.Calibration.Configuration
 
         public void Start()
         {
-            base.GetComponentInParent<ConfigurationManager>().Register(this, out this.cam);
+            this.configurationManager.Register(this, out this.cam);
             gameObject.name = "Mesh " + cam.Configuration.DisplayName;
-            transform.localRotation = Quaternion.identity;
+            transform.rotation = this.cam.Plane.transform.rotation;
             transform.position = this.cam.Plane.transform.position;
 
             CalculateVertexStartPosition();
@@ -56,14 +64,14 @@ namespace Htw.Cave.Calibration.Configuration
             this.meshFilter.mesh.name = "Configuration Mesh";
             this.meshRenderer.receiveShadows = false;
             this.meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
-            this.meshRenderer.material = Resources.Load<Material>("Material " + (this.cam.Camera.targetDisplay + 1));
+            this.meshRenderer.material = Resources.Load<Material>("Material " + (this.cam.Configuration.DisplayId + 1));
             Build(true);
         }
 
         private void SpawnVertices()
         {
             GameObject go;
-            for (int i = 0; i < this.configurationVertices.Length; ++i)
+            for (int i = 0; i < 4; ++i)
             {
                 go = new GameObject();
                 go.transform.parent = transform;
@@ -80,10 +88,10 @@ namespace Htw.Cave.Calibration.Configuration
         private void CalculateVertexStartPosition()
         {
             Vector3[] corners = this.cam.TransformPlanePoints();
-            this.vertices[0] = corners[3];
-            this.vertices[1] = corners[2];
-            this.vertices[2] = corners[0];
-            this.vertices[3] = corners[1];
+            this.vertices[0] = corners[0];
+            this.vertices[1] = corners[1];
+            this.vertices[2] = corners[3];
+            this.vertices[3] = corners[2];
         }
 
         public void Build(bool force = false)
@@ -97,7 +105,7 @@ namespace Htw.Cave.Calibration.Configuration
                     new Vector2(0, 0), new Vector2(0, 1),
                     new Vector2(1, 0), new Vector2(1, 1)
                 };
-                this.meshFilter.mesh.triangles = new int[6] { 0, 2, 1, 2, 3, 1 };
+                this.meshFilter.mesh.triangles = new int[6] { 3, 2, 0, 3, 0, 1 };
             }
 
             this.meshFilter.mesh.RecalculateNormals();

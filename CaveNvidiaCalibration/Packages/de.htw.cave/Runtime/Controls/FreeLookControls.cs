@@ -36,6 +36,12 @@ namespace Htw.Cave.Controls
 			Lift(JoyconInput.GetAxis("Vertical R"));
 		}
 
+		public void Reset()
+		{
+			this.speed = 5f;
+			this.sensitivity = 3f;
+		}
+
 		public void Move(float h, float v)
 		{
 			Vector3 direction = (transform.forward * v + transform.right * h).normalized;
@@ -54,12 +60,6 @@ namespace Htw.Cave.Controls
 		public void Lift(float v)
 		{
 			transform.position += transform.up * v * Time.deltaTime * (this.speed * 0.5f);
-		}
-
-		public void Reset()
-		{
-			this.speed = 5f;
-			this.sensitivity = 3f;
 		}
 	}
 }

@@ -14,10 +14,12 @@ namespace Htw.Cave.VirtualEnvironmentSetup.Modules
 		public override bool IsSkippable { get => true; }
 
 		private Texture2D background;
+		private bool dpadBindings;
 
 		public JoyconModule()
 		{
 			this.background = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+			this.dpadBindings = false;
 
 			this.background.SetPixel(0, 0, new Color(0.89f, 0f, 0.06f));
 			this.background.Apply();
@@ -30,7 +32,8 @@ namespace Htw.Cave.VirtualEnvironmentSetup.Modules
 
 		public override void OnGUI(ModuleMaker maker)
 		{
-
+			WindowDesignUtility.SectionLabel("Bindings");
+			this.dpadBindings = EditorGUILayout.Toggle("Dpad", this.dpadBindings);
 		}
 
 		public override void Build(ModuleMaker maker, GameObject root, GameObject head)
@@ -41,18 +44,26 @@ namespace Htw.Cave.VirtualEnvironmentSetup.Modules
 
 			JoyconController controller = joycon.AddComponent<JoyconController>();
 
+			JoyconEditorInternals.CreateAxis(JoyconDefaults.StickEntries);
+			JoyconEditorInternals.CreateAxis(JoyconDefaults.ButtonEntries);
+
 			string assetPath = ModuleMaker.AssetPath + "/Joycon Binding.asset";
 			JoyconBinding asset = AssetDatabase.LoadAssetAtPath<JoyconBinding>(assetPath);
 
 			if(asset == null)
 			{
 				asset = ScriptableObject.CreateInstance<JoyconBinding>();
+
+				if(this.dpadBindings)
+				{
+					JoyconEditorInternals.CreateAxis(JoyconDefaults.DpadEntries);
+					asset.Add(JoyconDefaults.DpadSchemes);
+				}
+
 				AssetDatabase.CreateAsset(asset, assetPath);
 			}
 
 			controller.Binding = asset;
-
-			JoyconBindingEditor.CreateDefaultInputManagerEntries();
 		}
 	}
 }

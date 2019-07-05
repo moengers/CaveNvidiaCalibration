@@ -16,6 +16,18 @@ namespace Htw.Cave.Controls
 	{
 		private const float Spacing = 0.1f;
 
+		[SerializeField]
+		private Transform head;
+		public Transform Head
+		{
+			get => this.head;
+			set
+			{
+				this.head = value;
+				CenterCollider();
+			}
+		}
+
 		private CapsuleCollider capsule;
 
 		public void Awake()
@@ -32,13 +44,13 @@ namespace Htw.Cave.Controls
 		{
 			this.capsule = base.GetComponent<CapsuleCollider>();
 			this.capsule.radius = 0.3f;
-			CenterCollider();
 		}
 
-		private void CenterCollider()
+		public void CenterCollider()
 		{
-			Vector3 position = transform.localPosition;
-			this.capsule.center = new Vector3(0f, position.y * -0.5f + (0.5f * Spacing), 0f);
+			Vector3 position = this.head.localPosition;
+
+			this.capsule.center = new Vector3(position.x, position.y * 0.5f + (0.5f * Spacing), position.z);
 			this.capsule.height = position.y + Spacing;
 		}
 	}

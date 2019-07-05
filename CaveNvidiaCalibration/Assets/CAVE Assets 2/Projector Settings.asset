@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTarget: 1
   forceFullScreen: 1
-  stereoEnabled: 0
+  stereoEnabled: 1
   stereoSeparation: 0.064
   stereoConvergence: 10
   nearClipPlane: 0.01

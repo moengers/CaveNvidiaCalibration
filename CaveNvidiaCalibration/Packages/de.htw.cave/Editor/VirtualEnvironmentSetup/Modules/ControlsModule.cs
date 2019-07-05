@@ -68,14 +68,14 @@ namespace Htw.Cave.VirtualEnvironmentSetup.Modules
 			{
 				if(this.firstPerson)
 				{
+					TryAttachHeightControlledCollider(root, head);
 					AttachFirstPerson(root);
-					TryAttachHeightControlledCollider(head);
 				}
 
 				if(this.teleporter && maker.IsModuleAvailable<KinectModule>())
 				{
+					TryAttachHeightControlledCollider(root, head);
 					AttachTeleporter(root);
-					TryAttachHeightControlledCollider(head);
 				}
 
 				bool physicals = this.firstPerson || this.teleporter;
@@ -111,10 +111,10 @@ namespace Htw.Cave.VirtualEnvironmentSetup.Modules
 			root.AddComponent<FreeLookControls>();
 		}
 
-		private void TryAttachHeightControlledCollider(GameObject head)
+		private void TryAttachHeightControlledCollider(GameObject root, GameObject head)
 		{
-			if(head.GetComponent<HeightControlledCollider>() == null)
-				head.AddComponent<HeightControlledCollider>();
+			if(root.GetComponent<HeightControlledCollider>() == null)
+				root.AddComponent<HeightControlledCollider>().Head = head.transform;
 		}
 	}
 }

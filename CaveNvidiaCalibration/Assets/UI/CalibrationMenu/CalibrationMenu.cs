@@ -311,17 +311,17 @@ public class CalibrationMenu : MonoBehaviour
     //Mapped display and corner/vertices for the calibrationManager
     private int MapperDisplayToMash(int display)
     {
-        //configManager use 0, 1, 2, 3 as R, L, B, F or random??
+        
         switch (display)
         {
             case 0:
-                return 1;
-            case 1:
-                return 3;
-            case 2:
                 return 0;
-            case 3:
+            case 1:
+                return 1;
+            case 2:
                 return 2;
+            case 3:
+                return 3;
             default:
                 return -1;
         }
@@ -331,13 +331,13 @@ public class CalibrationMenu : MonoBehaviour
         switch (corner)
         {
             case 0:
-                return 2;
-            case 1:
-                return 3;
-            case 2:
-                return 1;
-            case 3:
                 return 0;
+            case 1:
+                return 1;
+            case 2:
+                return 3;
+            case 3:
+                return 2;
             default:
                 return -1;
         }

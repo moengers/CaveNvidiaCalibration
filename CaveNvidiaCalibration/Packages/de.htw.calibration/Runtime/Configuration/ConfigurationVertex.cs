@@ -33,7 +33,7 @@ namespace Htw.Cave.Calibration.Configuration
         {
             this.configurationMesh.Register(this, out this.index);
             gameObject.name = "Vertex " + ResolveVertexName(this.index);
-            transform.rotation = Quaternion.identity;
+            transform.localRotation = Quaternion.identity;
             transform.position = this.configurationMesh.Vertices[this.index];
         }
 
@@ -48,13 +48,13 @@ namespace Htw.Cave.Calibration.Configuration
             switch (index)
             {
                 case 0:
-                    return "Bottom Left";
-                case 1:
-                    return "Bottom Right";
-                case 2:
                     return "Top Left";
-                case 3:
+                case 1:
                     return "Top Right";
+                case 2:
+                    return "Bottom Left";
+                case 3:
+                    return "Bottom Right";
                 default:
                     return "Unknown";
             }

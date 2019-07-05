@@ -126,6 +126,11 @@ namespace Htw.Cave.Kinect
 
 			this.actor.IsTracked = false;
 
+			// For some reason the Kinect needs some time to open the sensor.
+			// The null check avoids looking for a tracked body during that time.
+			if(bodies == null)
+				return;
+
 			for(int i = 0; i < bodies.Length; ++i)
 			{
 				if(bodies[i].TrackingId == this.actor.TrackingId)

@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4113f639c00cfa4a802833854a6aee4, type: 3}
-  m_Name: Projector Settings
+  m_Script: {fileID: 11500000, guid: c0a664786df313a44ad786f1d358f3a4, type: 3}
+  m_Name: Projector Configuration Front
   m_EditorClassIdentifier: 
-  cameraTarget: 1
-  forceFullScreen: 1
-  stereoEnabled: 0
-  stereoSeparation: 0.064
-  stereoConvergence: 10
-  nearClipPlane: 0.01
-  farClipPlane: 1000
+  displayId: 1
+  displayName: Front
+  width: 3
+  height: 2.45
+  fieldOfView: 90
+  invertStereo: 0

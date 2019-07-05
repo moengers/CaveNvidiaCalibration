@@ -22,7 +22,7 @@ namespace Htw.Cave.Kinect
 					transform.localRotation = base.actor.GetFaceRotation();
 				} else if(base.actor.IsShoulderTracked()) {
 					transform.localPosition = base.actor.GetShoulderPosition() + Vector3.up * 0.3f;
-					transform.localRotation = base.actor.GetShoulderRotation();
+					transform.localRotation = Quaternion.identity;
 				}
 			}
 		}

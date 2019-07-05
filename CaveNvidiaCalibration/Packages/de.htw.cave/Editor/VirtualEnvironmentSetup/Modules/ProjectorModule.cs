@@ -149,6 +149,7 @@ namespace Htw.Cave.VirtualEnvironmentSetup.Modules
 				asset = ScriptableObject.CreateInstance<ProjectorSettings>();
 				asset.CameraTarget = this.target;
 				asset.ForceFullScreen = false;
+				asset.StereoEnabled = true;
 				asset.StereoSeparation = 0.064f;
 				asset.StereoConvergence = 10f;
 				asset.NearClipPlane = 0.01f;

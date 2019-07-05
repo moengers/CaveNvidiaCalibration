@@ -12,22 +12,6 @@ namespace Htw.Cave.Joycons
 	[CustomEditor(typeof(JoyconBinding))]
 	public class JoyconBindingEditor : Editor
 	{
-		public static void CreateDefaultInputManagerEntries()
-		{
-			JoyconEditorInternals.CreateAxis(
-				JoyconEditorInternals.InputManagerEntry.Button("Joycon Horizontal L", "d", "a"),
-				JoyconEditorInternals.InputManagerEntry.Mouse("Joycon Horizontal R", JoyconEditorInternals.InputManagerEntry.Axis.X),
-				JoyconEditorInternals.InputManagerEntry.Button("Joycon Vertical L", "w", "s"),
-				JoyconEditorInternals.InputManagerEntry.Mouse("Joycon Vertical R", JoyconEditorInternals.InputManagerEntry.Axis.Y),
-				JoyconEditorInternals.InputManagerEntry.Button("Joycon Trigger L", "left ctrl"),
-				JoyconEditorInternals.InputManagerEntry.Button("Joycon Trigger R", "mouse 0"),
-				JoyconEditorInternals.InputManagerEntry.Button("Joycon Bumper L", "left shift"),
-				JoyconEditorInternals.InputManagerEntry.Button("Joycon Bumper R", "mouse 1"),
-				JoyconEditorInternals.InputManagerEntry.Button("Joycon Stick L", "q"),
-				JoyconEditorInternals.InputManagerEntry.Button("Joycon Stick R", "e")
-			);
-		}
-
 		private JoyconBinding me;
 		private SerializedProperty schemesProperty;
 		private ReorderableList schemesList;

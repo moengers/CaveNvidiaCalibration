@@ -27,7 +27,7 @@ namespace Htw.Cave.Joycons
 
 		public JoyconStick(bool horizontal)
 		{
-			this.i = horizontal ? 1 : 0;
+			this.i = horizontal ? 0 : 1;
 		}
 
 		public override float GetAxis(Joycon joycon)

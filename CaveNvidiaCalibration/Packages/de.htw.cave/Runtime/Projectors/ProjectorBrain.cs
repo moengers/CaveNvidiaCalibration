@@ -74,6 +74,7 @@ namespace Htw.Cave.Projectors
 
 				cam.SetCameraClipPlanes(this.settings.NearClipPlane, this.settings.FarClipPlane);
 				cam.SetCameraStereo(this.settings.StereoConvergence, this.settings.StereoSeparation);
+				cam.SetStereoActive(this.settings.StereoEnabled);
 			}
 		}
 

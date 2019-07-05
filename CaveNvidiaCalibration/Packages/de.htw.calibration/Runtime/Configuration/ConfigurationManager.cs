@@ -11,8 +11,8 @@ namespace Htw.Cave.Calibration.Configuration
     [RequireComponent(typeof(VirtualEnvironmentLink))]
     public class ConfigurationManager : MonoBehaviour
     {
-        private List<ConfigurationMesh> configurationMeshes;
-        public List<ConfigurationMesh> ConfigurationMeshes
+        private ConfigurationMesh[] configurationMeshes;
+        public ConfigurationMesh[] ConfigurationMeshes
         {
             get => this.configurationMeshes;
             set => this.configurationMeshes = value;
@@ -24,7 +24,6 @@ namespace Htw.Cave.Calibration.Configuration
         public void Awake()
         {
             this.virtualEnvironmentLink = base.GetComponent<VirtualEnvironmentLink>();
-            this.configurationMeshes = new List<ConfigurationMesh>();
         }
 
         public void Start()
@@ -36,6 +35,8 @@ namespace Htw.Cave.Calibration.Configuration
                 this.virtualEnvironmentLink.VirtualEnvironment
                 .GetComponentInChildren<ProjectorMount>().Cameras
             );
+
+            this.configurationMeshes = new ConfigurationMesh[this.cameras.Count];
 
             SpawnMeshes();
         }
@@ -53,8 +54,8 @@ namespace Htw.Cave.Calibration.Configuration
 
         public void Register(ConfigurationMesh configurationMesh, out ProjectorCamera camera)
         {
-            this.configurationMeshes.Add(configurationMesh);
             camera = this.cameras.Dequeue();
+            this.configurationMeshes[camera.Configuration.DisplayId] = configurationMesh;
         }
     }
 }

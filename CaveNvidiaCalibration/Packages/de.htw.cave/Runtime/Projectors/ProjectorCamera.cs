@@ -38,6 +38,7 @@ namespace Htw.Cave.Projectors
 		}
 
 		private ProjectorMount mount;
+		private bool stereo;
 		private Vector3[] planePoints;
 		private Vector3 vr, vu, vn;
 
@@ -91,6 +92,15 @@ namespace Htw.Cave.Projectors
 			this.cam.rect = new Rect(this.configuration.DisplayId * size, 0f, size, 1f);
 		}
 
+		public void SetStereoActive(bool active)
+		{
+#if UNITY_EDITOR
+			this.stereo = false;
+#else
+			this.stereo = active;
+#endif
+		}
+
 		public void SetCameraClipPlanes(float near, float far)
 		{
 			this.cam.nearClipPlane = near;
@@ -99,6 +109,7 @@ namespace Htw.Cave.Projectors
 
 		public void SetCameraStereo(float convergence, float separation)
 		{
+			this.stereo = true;
 			this.cam.stereoConvergence = convergence;
 			this.cam.stereoSeparation = separation;
 		}
@@ -113,24 +124,25 @@ namespace Htw.Cave.Projectors
 			ProjectorEyes eyes = this.mount.Eyes;
 			eyes.Invert = this.configuration.InvertStereo;
 
-#if UNITY_EDITOR
-			Matrix4x4 worldToCameraMat;
-			Matrix4x4 projectionMat = Projection.Holographic(plane[3], plane[2], plane[0], vr, vu, vn, eyes.Anchor, this.cam.nearClipPlane, this.cam.farClipPlane, out worldToCameraMat);
+			if(stereo)
+			{
+				Matrix4x4 worldToCameraMatLeft;
+				Matrix4x4 worldToCameraMatRight;
 
-			this.cam.projectionMatrix = projectionMat;
-			//this.cam.worldToCameraMatrix = worldToCameraMat;
-#else
-			Matrix4x4 worldToCameraMatLeft;
-			Matrix4x4 worldToCameraMatRight;
+				Matrix4x4 projectionMatLeft = Projection.Holographic(plane[3], plane[2], plane[0], vr, vu, vn, eyes.Left, this.cam.nearClipPlane, this.cam.farClipPlane, out worldToCameraMatLeft);
+				Matrix4x4 projectionMatRight = Projection.Holographic(plane[3], plane[2], plane[0], vr, vu, vn, eyes.Right, this.cam.nearClipPlane, this.cam.farClipPlane, out worldToCameraMatRight);
 
-			Matrix4x4 projectionMatLeft = Projection.Holographic(plane[3], plane[2], plane[0], vr, vu, vn, eyes.Left, this.cam.nearClipPlane, this.cam.farClipPlane, out worldToCameraMatLeft);
-			Matrix4x4 projectionMatRight = Projection.Holographic(plane[3], plane[2], plane[0], vr, vu, vn, eyes.Right, this.cam.nearClipPlane, this.cam.farClipPlane, out worldToCameraMatRight);
+				this.cam.SetStereoProjectionMatrix(Camera.StereoscopicEye.Left, projectionMatLeft);
+				this.cam.SetStereoProjectionMatrix(Camera.StereoscopicEye.Right, projectionMatRight);
+				//this.cam.SetStereoViewMatrix(Camera.StereoscopicEye.Left, worldToCameraMatLeft);
+				//this.cam.SetStereoViewMatrix(Camera.StereoscopicEye.Right, worldToCameraMatRight);
+			} else {
+				Matrix4x4 worldToCameraMat;
+				Matrix4x4 projectionMat = Projection.Holographic(plane[3], plane[2], plane[0], vr, vu, vn, eyes.Anchor, this.cam.nearClipPlane, this.cam.farClipPlane, out worldToCameraMat);
 
-			this.cam.SetStereoProjectionMatrix(Camera.StereoscopicEye.Left, projectionMatLeft);
-			this.cam.SetStereoProjectionMatrix(Camera.StereoscopicEye.Right, projectionMatRight);
-			//this.cam.SetStereoViewMatrix(Camera.StereoscopicEye.Left, worldToCameraMatLeft);
-			//this.cam.SetStereoViewMatrix(Camera.StereoscopicEye.Right, worldToCameraMatRight);
-#endif
+				this.cam.projectionMatrix = projectionMat;
+				//this.cam.worldToCameraMatrix = worldToCameraMat;
+			}
 		}
 
 		public Vector3[] TransformPlanePoints()

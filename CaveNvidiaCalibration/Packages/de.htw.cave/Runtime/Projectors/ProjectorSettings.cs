@@ -38,6 +38,14 @@ namespace Htw.Cave.Projectors
 		}
 
 		[SerializeField]
+		private bool stereoEnabled;
+		public bool StereoEnabled
+		{
+			get => this.stereoEnabled;
+			set => this.stereoEnabled = value;
+		}
+
+		[SerializeField]
 		private float stereoSeparation;
 		public float StereoSeparation
 		{
